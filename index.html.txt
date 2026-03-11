@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>AI Health Assistant</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#e3f2fd;
+text-align:center;
+padding:40px;
+}
+
+.chatbox{
+background:white;
+width:400px;
+margin:auto;
+padding:20px;
+border-radius:10px;
+}
+
+#chat{
+height:300px;
+overflow:auto;
+border:1px solid gray;
+padding:10px;
+margin-bottom:10px;
+}
+
+input{
+width:70%;
+padding:10px;
+}
+
+button{
+padding:10px;
+background:#2196f3;
+color:white;
+border:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>AI Health Assistant</h1>
+
+<div class="chatbox">
+
+<div id="chat"></div>
+
+<input id="message" placeholder="Ask health question">
+
+<button onclick="send()">Send</button>
+
+</div>
+
+<script>
+
+async function send(){
+
+let msg=document.getElementById("message").value;
+
+let chat=document.getElementById("chat");
+
+chat.innerHTML += "<p><b>You:</b> "+msg+"</p>";
+
+let response = await fetch("https://api-inference.huggingface.co/models/google/flan-t5-large",{
+
+method:"POST",
+
+headers:{
+"Authorization":"Bearer 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",
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({inputs:msg})
+
+});
+
+let data = await response.json();
+
+let reply = data[0].generated_text;
+
+chat.innerHTML += "<p><b>AI:</b> "+reply+"</p>";
+
+}
+
+</script>
+
+</body>
+
+</html>
